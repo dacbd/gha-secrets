@@ -9,9 +9,13 @@ Create or update your GitHub Actions secrets.
 
 
 ## References
+- https://docs.github.com/en/rest/reference/actions#secrets
+- https://github.com/github/tweetsodium
 
+## Simular actions
+- https://github.com/hmanzur/actions-set-secret
+- https://github.com/jon-grey/github-actions-secrets-creator
 
-## Other actions
 
 
 ## License
