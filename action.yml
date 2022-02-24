@@ -1,0 +1,6 @@
+name: 'gha-secrets'
+description: 'Create or update your GitHub Action secrets from you workflows'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
