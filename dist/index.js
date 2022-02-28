@@ -11910,11 +11910,17 @@ async function run() {
     
     console.log(context)
     console.log(process.env)
+    console.log(github)
     process.exit(0);
     const octokit = github.getOctokit(token);
 
     const repository_id = context.payload.repository.id
 
+    await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}', {
+      owner: 'dacbd',
+      repo: 'gha-secrets',
+      job_id: 42
+    })
 
     if (!loc) {
       core.warning('location not set, inferring what type of secret from the running environment');
