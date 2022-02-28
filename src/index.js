@@ -53,8 +53,7 @@ async function run() {
     
     // Encrypt Secret
     core.startGroup('Encrypt Value')
-    console.log(res)
-    const bytes = sodium.seal(Buffer.from(value), Buffer.from(res.key, 'base64'));
+    const bytes = sodium.seal(Buffer.from(value), Buffer.from(res.data.key, 'base64'));
     const encrypted_value = Buffer.from(bytes).toString('base64');
     core.endGroup();
 
@@ -63,8 +62,9 @@ async function run() {
     switch (loc) {
       case 'repo':
       case 'repository':
+        core.debug('Saving Secret at repo level');
         await octokit.rest.actions.createOrUpdateRepoSecret({
-          key_id: res.key_id,
+          key_id: res.data.key_id,
           owner: org,
           repo: repo,
           secret_name: name,
@@ -73,8 +73,9 @@ async function run() {
         break;
       case 'org':
       case 'organization ':
+        core.debug('Saving Secret at org level');
         await octokit.rest.actions.createOrUpdateOrgSecret({
-          key_id: res.key_id,
+          key_id: res.data.key_id,
           org: org,
           secret_name: name,
           encrypted_value: encrypted_value,
@@ -82,8 +83,9 @@ async function run() {
         });
         break;
       default:
+        core.debug('Saving Secret at environment level');
         await octokit.rest.actions.createOrUpdateEnvironmentSecret({
-          key_id: res.key_id,
+          key_id: res.data.key_id,
           repository_id: repository_id,
           environment_name: loc,
           secret_name: name,
