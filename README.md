@@ -1,13 +1,14 @@
 # gha-secrets
 [![Test Action](https://github.com/dacbd/gha-secrets/actions/workflows/test.yml/badge.svg)](https://github.com/dacbd/gha-secrets/actions/workflows/test.yml) [![CodeQL](https://github.com/dacbd/gha-secrets/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/dacbd/gha-secrets/actions/workflows/codeql-analysis.yml)
 
-
 Create or update your GitHub Actions secrets.
+
+It's probably simpler to just use the [gh cli](https://cli.github.com/manual/gh_secret_set) which [is installed on GitHub runners](https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-Readme.md#cli-tools)
 
 > :warning: The new Secret value wont change for the workflow using this action or any jobs currently running :warning:
 
 ## Options
-| option | default value | notes |
+| option | value | notes |
 | ------------ | ------------ | ------------ |
 | `token` | GitHub Token w/ correct permissions  | `required`  |
 | `location` | Where the secret is `repo`, `org`, `(evnironment name)`  | defaults to `repo`/`repository` |
