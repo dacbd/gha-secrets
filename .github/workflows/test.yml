@@ -26,7 +26,7 @@ jobs:
           value: ${{ steps.new.outputs.value }}
       - name: Test for change
         run: |
-          if [ ${{ steps.previous.outputs.value }} == ${{ secrets.GHA_SECRETS_TEST }} ]; then
+          if [ "${{ steps.previous.outputs.value }}" == "${{ secrets.GHA_SECRETS_TEST }}" ]; then
             echo 'Failed'
             exit 1
           fi
