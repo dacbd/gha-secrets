@@ -1,6 +1,8 @@
 name: Test Action
 on:
   workflow_dispatch:
+  push:
+
 
 jobs:
   test:
@@ -16,7 +18,9 @@ jobs:
         run: echo '::set-output name=value::${{ secrets.GHA_SECRETS_TEST }}'
       - name: Gen new random Secret
         id: new
-        run: echo '::set-output name=value::$(head -c 12 /dev/random | base64)'
+        run: |
+          value=$(head -c 12 /dev/random | base64)
+          echo '::set-output name=value::$value'
       - uses: ./.
         with:
           token: ${{ secrets.TOKEN }}
