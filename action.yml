@@ -8,7 +8,7 @@ inputs:
     required: true
   loc:  
     description: 'Location of the secret: repo, org, (name of environment). Defaults to "repo"'
-    required: false
+    required: true
     default: 'repo'
   name:  
     description: 'The name of the secret.'
