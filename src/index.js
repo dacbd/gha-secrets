@@ -12,8 +12,10 @@ async function run() {
     
     console.log(context)
 
+    process.exit(0);
     const octokit = github.getOctokit(token);
 
+    const repository_id = context.payload.repository.id
 
 
     if (!loc) {
