@@ -15,7 +15,7 @@ async function run() {
     const [org, repo] = context.payload.repository.full_name.split('/');
     core.setSecret(value);
 
-    core.debug(`loc: ${loc}`)
+    core.debug(`location: ${loc}`)
     core.debug(`name: ${name}`)
     core.debug(`value: ${value}`)
     core.debug(`visibility: ${visibility}`)
