@@ -1,5 +1,5 @@
-[![Test Action](https://github.com/dacbd/gha-secrets/actions/workflows/test.yml/badge.svg)](https://github.com/dacbd/gha-secrets/actions/workflows/test.yml)
 # gha-secrets
+[![Test Action](https://github.com/dacbd/gha-secrets/actions/workflows/test.yml/badge.svg)](https://github.com/dacbd/gha-secrets/actions/workflows/test.yml)
 Create or update your GitHub Actions secrets.
 
 > :warning: The new Secret value wont change for the workflow using this action or any jobs currently running :warning:
