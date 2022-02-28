@@ -11926,6 +11926,7 @@ async function run() {
     switch (loc) {
       case 'repo':
       case 'repository':
+        core.debug('loading repo key')
         res = await octokit.rest.actions.getRepoPublicKey({
           owner: org,
           repo: repo
@@ -11933,11 +11934,13 @@ async function run() {
         break;
       case 'org':
       case 'organization ':
+        core.debug('loading org key')
         res = await octokit.rest.actions.getOrgPublicKey({
           org: org
         });
         break;
       default:
+        core.debug('loading environment key')
         res = await octokit.rest.actions.getEnvironmentPublicKey({
           repository_id: repository_id,
           environment_name: loc
