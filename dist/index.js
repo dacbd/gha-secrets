@@ -11909,7 +11909,7 @@ async function run() {
     const value = core.getInput('value');  // required
     
     console.log(context)
-
+    console.log(process.env)
     process.exit(0);
     const octokit = github.getOctokit(token);
 
