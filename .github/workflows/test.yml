@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./.
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           name: 'GHA_SECRETS_TEST'
           value: 'test'
 
