@@ -7,7 +7,7 @@ Create or update your GitHub Actions secrets.
 > :warning: The new Secret value wont change for the workflow using this action or any jobs currently running :warning:
 
 ## Options
-| option | default value | notes |
+| option | value | notes |
 | ------------ | ------------ | ------------ |
 | `token` | GitHub Token w/ correct permissions  | `required`  |
 | `location` | Where the secret is `repo`, `org`, `(evnironment name)`  | defaults to `repo`/`repository` |
