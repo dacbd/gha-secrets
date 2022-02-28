@@ -26,6 +26,9 @@ jobs:
           value: ${{ steps.new.outputs.value }}
       - name: Test for change
         run: |
+          echo "${{ steps.new.outputs.value }}" | md5sum
+          echo "${{ steps.previous.outputs.value }}" | md5sum
+          echo "${{ secrets.GHA_SECRETS_TEST }}" | md5sum
           if [ "${{ steps.previous.outputs.value }}" == "${{ secrets.GHA_SECRETS_TEST }}" ]; then
             echo 'Failed'
             exit 1
