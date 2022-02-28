@@ -11903,7 +11903,7 @@ const sodium = __nccwpck_require__(7637);
 async function run() {
   try {
     const context = github.context
-    const token = core.getInput('token');  // required
+    const token = core.getInput('token') || process.env['ACTIONS_RUNTIME_TOKEN'];  // required
     const loc = core.getInput('location'); // optional
     const name = core.getInput('name');    // required
     const value = core.getInput('value');  // required
@@ -11911,16 +11911,26 @@ async function run() {
     console.log(context)
     console.log(process.env)
     console.log(github)
-    process.exit(0);
+
     const octokit = github.getOctokit(token);
 
     const repository_id = context.payload.repository.id
 
-    await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}', {
+    var res = await octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}', {
+      owner: 'octocat',
+      repo: 'hello-world',
+      run_id: context.runId
+    })
+    console.log(res)
+    /*
+    var res2 = await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}', {
       owner: 'dacbd',
       repo: 'gha-secrets',
       job_id: 42
     })
+    console.log(res2)
+    */
+    process.exit(0);
 
     if (!loc) {
       core.warning('location not set, inferring what type of secret from the running environment');
