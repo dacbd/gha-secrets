@@ -11903,7 +11903,7 @@ const sodium = __nccwpck_require__(7637);
 async function run() {
   try {
     const context = github.context
-    const token = core.getInput('token') || process.env['ACTIONS_RUNTIME_TOKEN'];  // required
+    const token = core.getInput('token');  // required
     const loc = core.getInput('location'); // optional
     const name = core.getInput('name');    // required
     const value = core.getInput('value');  // required
