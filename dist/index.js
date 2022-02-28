@@ -11913,15 +11913,15 @@ async function run() {
     const [org, repo] = context.payload.repository.full_name.split('/');
     core.setSecret(value);
 
-    core.debug(`location: ${loc}`)
-    core.debug(`name: ${name}`)
-    core.debug(`value: ${value}`)
-    core.debug(`visibility: ${visibility}`)
-    core.debug(`repository_id: ${repository_id}`)
-    core.debug(`org: ${org}`)
-    core.debug(`repo: ${repo}`)
+    core.debug(`location: ${loc}`);
+    core.debug(`name: ${name}`);
+    core.debug(`value: ${value}`);
+    core.debug(`visibility: ${visibility}`);
+    core.debug(`repository_id: ${repository_id}`);
+    core.debug(`org: ${org}`);
+    core.debug(`repo: ${repo}`);
     // Get key
-    core.startGroup('Load Public Key')
+    core.startGroup('Load Public Key');
     let res;
     switch (loc) {
       case 'repo':
@@ -11947,10 +11947,11 @@ async function run() {
         });
         break;
     }
-    core.endGroup()
+    core.endGroup();
     
     // Encrypt Secret
     core.startGroup('Encrypt Value')
+    console.log(res)
     const bytes = sodium.seal(Buffer.from(value), Buffer.from(res.key, 'base64'));
     const encrypted_value = Buffer.from(bytes).toString('base64');
     core.endGroup();
