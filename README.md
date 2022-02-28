@@ -1,5 +1,5 @@
 # gha-secrets
-[![Test Action](https://github.com/dacbd/gha-secrets/actions/workflows/test.yml/badge.svg)](https://github.com/dacbd/gha-secrets/actions/workflows/test.yml)
+[![Test Action](https://github.com/dacbd/gha-secrets/actions/workflows/test.yml/badge.svg)](https://github.com/dacbd/gha-secrets/actions/workflows/test.yml) [![CodeQL](https://github.com/dacbd/gha-secrets/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/dacbd/gha-secrets/actions/workflows/codeql-analysis.yml)
 
 
 Create or update your GitHub Actions secrets.
