@@ -18,9 +18,7 @@ jobs:
         run: echo '::set-output name=value::${{ secrets.GHA_SECRETS_TEST }}'
       - name: Gen new random Secret
         id: new
-        run: |
-          value=$(head -c 12 /dev/random | base64)
-          echo '::set-output name=value::$value'
+        run: echo "::set-output name=value::$(tr -dc 'a-zA-Z0-9' < /dev/random | head -c10)"
       - uses: ./.
         with:
           token: ${{ secrets.TOKEN }}
