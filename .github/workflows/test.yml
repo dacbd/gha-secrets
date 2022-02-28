@@ -10,7 +10,7 @@ jobs:
       - run: |
           npm install
           npm run build
-      - run: git status --porecelain
+      - run: git status --porcelain
       - name: Keep previous test value
         id: previous
         run: echo '::set-output name=value::${{ secrets.GHA_SECRETS_TEST }}'
