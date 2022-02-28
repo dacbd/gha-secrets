@@ -13,8 +13,17 @@ async function run() {
     const octokit = github.getOctokit(token);
     const repository_id = context.payload.repository.id
     const [org, repo] = context.payload.repository.full_name.split('/');
+    core.setSecret(value);
 
+    core.debug(`loc: ${loc}`)
+    core.debug(`name: ${name}`)
+    core.debug(`value: ${value}`)
+    core.debug(`visibility: ${visibility}`)
+    core.debug(`repository_id: ${repository_id}`)
+    core.debug(`org: ${org}`)
+    core.debug(`repo: ${repo}`)
     // Get key
+    core.startGroup('Load Public Key')
     let res;
     switch (loc) {
       case 'repo':
@@ -37,12 +46,16 @@ async function run() {
         });
         break;
     }
+    core.endGroup()
     
     // Encrypt Secret
+    core.startGroup('Encrypt Value')
     const bytes = sodium.seal(Buffer.from(value), Buffer.from(res.key, 'base64'));
     const encrypted_value = Buffer.from(bytes).toString('base64');
+    core.endGroup();
 
     // Save Secret
+    core.startGroup('Save new Value')
     switch (loc) {
       case 'repo':
       case 'repository':
@@ -74,6 +87,7 @@ async function run() {
         });
         break;
     }
+    core.endGroup()
   } catch (err) {
     core.setFailed(err.message);
   }
