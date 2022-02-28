@@ -1,7 +1,9 @@
 name: 'gha-secrets'
 description: 'Create or update your GitHub Action secrets from you workflows'
 author: 'Daniel Barnes'
-
+branding:
+  icon: unlock
+  color: black
 inputs:
   token:
     description: 'A GitHub Token with permissions to edit secrets'
