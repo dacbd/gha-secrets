@@ -17,63 +17,72 @@ async function run() {
     const octokit = github.getOctokit(token);
 
     const repository_id = context.payload.repository.id
-
-    var res = await octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}', {
-      owner: 'octocat',
-      repo: 'hello-world',
-      run_id: context.runId
-    })
-    console.log(res)
-    /*
-    var res2 = await octokit.request('GET /repos/{owner}/{repo}/actions/jobs/{job_id}', {
-      owner: 'dacbd',
-      repo: 'gha-secrets',
-      job_id: 42
-    })
-    console.log(res2)
-    */
-    process.exit(0);
+    const [org, repo] = context.payload.repository.full_name.split('/');
 
     if (!loc) {
-      core.warning('location not set, inferring what type of secret from the running environment');
+      core.info('location not set, inferring what type of secret from the running environment');
     }
     
-    orgKey = await octokit.request('GET /orgs/{org}/actions/secrets/public-key', {
-      org: ''
-    });
-    repoKey = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', {
-      owner: 'octocat',
-      repo: 'hello-world'
-    });
-    envKey = await octokit.request('GET /repositories/{repository_id}/environments/{environment_name}/secrets/public-key', {
-      repository_id: 42,
-      environment_name: 'environment_name'
-    });
+    // Get key
+    let res;
+    switch (loc) {
+      case 'repo':
+      case 'repository':
+        res = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', {
+          owner: org,
+          repo: repo
+        });
+        break;
+      case 'org':
+      case 'organization ':
+        res = await octokit.request('GET /orgs/{org}/actions/secrets/public-key', {
+          org: org
+        });
+        break;
+      default:
+        res = await octokit.request('GET /repositories/{repository_id}/environments/{environment_name}/secrets/public-key', {
+          repository_id: repository_id,
+          environment_name: loc
+        });
+        break;
+    }
+    
+    // Encrypt Secret
+    const bytes = sodium.seal(Buffer.from(value), Buffer.from(res.key, 'base64'));
+    const encrypted_value = Buffer.from(bytes).toString('base64');
 
-    // org secret
-    await octokit.request('PUT /orgs/{org}/actions/secrets/{secret_name}', {
-      org: 'org',
-      secret_name: 'secret_name',
-      visibility: 'visibility'
-    });
-
-    // repo secret
-    await octokit.request('PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
-      owner: 'octocat',
-      repo: 'hello-world',
-      secret_name: 'secret_name',
-      encrypted_value: 'encrypted_value'
-    });
-
-    // environment secret
-    await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
-      repository_id: 42,
-      environment_name: 'environment_name',
-      secret_name: 'secret_name',
-      encrypted_value: 'encrypted_value',
-      key_id: 'key_id'
-    });
-
+    // Save Secret
+    switch (loc) {
+      case 'repo':
+      case 'repository':
+        await octokit.request('PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
+          key_id: res.key_id,
+          owner: org,
+          repo: repo,
+          secret_name: name,
+          encrypted_value: encrypted_value
+        });
+        break;
+      case 'org':
+      case 'organization ':
+        await octokit.request('PUT /orgs/{org}/actions/secrets/{secret_name}', {
+          key_id: res.key_id,
+          org: org,
+          secret_name: name,
+          encrypted_value: encrypted_value,
+          visibility: 'visibility'
+        });
+        break;
+      default:
+        await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
+          key_id: res.key_id,
+          repository_id: repository_id,
+          environment_name: loc,
+          secret_name: name,
+          encrypted_value: encrypted_value,
+        });
+        break;
+    }
   } catch (err) {
     core.setFailed(err.message);
   }

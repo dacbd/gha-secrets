@@ -2,6 +2,21 @@ name: 'gha-secrets'
 description: 'Create or update your GitHub Action secrets from you workflows'
 author: 'Daniel Barnes'
 
+inputs:
+  token:
+    description: 'A GitHub Token with permissions to edit secrets'
+    required: true
+  loc:  
+    description: 'Location of the secret: repo, org, (name of environment). Defaults to "repo"'
+    required: false
+    default: 'repo'
+  name:  
+    description: 'The name of the secret.'
+    required: true
+  value:  
+    description: 'The new value to be encrypted and set as the secret'
+    required: true
+
 runs:
   using: 'node16'
   main: 'dist/index.js'
