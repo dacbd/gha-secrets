@@ -11,6 +11,9 @@ async function run() {
     const value = core.getInput('value');  // required
     const octokit = github.getOctokit(token);
 
+
+    console.log(context)
+
     if (!loc) {
       core.warning('location not set, inferring what type of secret from the running environment');
     }

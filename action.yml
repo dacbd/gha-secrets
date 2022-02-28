@@ -1,5 +1,6 @@
 name: 'gha-secrets'
 description: 'Create or update your GitHub Action secrets from you workflows'
+author: 'Daniel Barnes'
 
 runs:
   using: 'node16'
