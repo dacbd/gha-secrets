@@ -1,4 +1,4 @@
-name: test
+name: Test Action
 on:
   workflow_dispatch:
 
@@ -7,9 +7,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: |
+          npm install
+          npm run build
+      - run: git status --poreclein
+      - name: Keep previous test value
+        id: previous
+        run: echo '::set-output name=value::${{ secrets.GHA_SECRETS_TEST }}'
+      - name: Gen new random Secret
+        id: new
+        run: echo '::set-output name=value::$(head -c 12 /dev/random | base64)'
       - uses: ./.
         with:
           token: ${{ secrets.TOKEN }}
           name: 'GHA_SECRETS_TEST'
-          value: 'test'
+          value: ${{ steps.new.outputs.value }}
+      - name: Test for change
+        run: |
+          if [ ${{ steps.previous.outputs.value }} == ${{ secrets,GHA_SECRETS_TEST }} ]; then
+            echo 'Failed'
+            exit 1
+          fi
+          echo 'Success' 
 
