@@ -9,38 +9,29 @@ async function run() {
     const loc = core.getInput('location'); // optional
     const name = core.getInput('name');    // required
     const value = core.getInput('value');  // required
-    
-    console.log(context)
-    console.log(process.env)
-    console.log(github)
-
+    const visibility = core.getInput('visibility'); // optional
     const octokit = github.getOctokit(token);
-
     const repository_id = context.payload.repository.id
     const [org, repo] = context.payload.repository.full_name.split('/');
 
-    if (!loc) {
-      core.info('location not set, inferring what type of secret from the running environment');
-    }
-    
     // Get key
     let res;
     switch (loc) {
       case 'repo':
       case 'repository':
-        res = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', {
+        res = await octokit.rest.actions.getRepoPublicKey({
           owner: org,
           repo: repo
         });
         break;
       case 'org':
       case 'organization ':
-        res = await octokit.request('GET /orgs/{org}/actions/secrets/public-key', {
+        res = await octokit.rest.actions.getOrgPublicKey({
           org: org
         });
         break;
       default:
-        res = await octokit.request('GET /repositories/{repository_id}/environments/{environment_name}/secrets/public-key', {
+        res = await octokit.rest.actions.getEnvironmentPublicKey({
           repository_id: repository_id,
           environment_name: loc
         });
@@ -55,7 +46,7 @@ async function run() {
     switch (loc) {
       case 'repo':
       case 'repository':
-        await octokit.request('PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
+        await octokit.rest.actions.createOrUpdateRepoSecret({
           key_id: res.key_id,
           owner: org,
           repo: repo,
@@ -65,16 +56,16 @@ async function run() {
         break;
       case 'org':
       case 'organization ':
-        await octokit.request('PUT /orgs/{org}/actions/secrets/{secret_name}', {
+        await octokit.rest.actions.createOrUpdateOrgSecret({
           key_id: res.key_id,
           org: org,
           secret_name: name,
           encrypted_value: encrypted_value,
-          visibility: 'visibility'
+          visibility: visibility
         });
         break;
       default:
-        await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
+        await octokit.rest.actions.createOrUpdateEnvironmentSecret({
           key_id: res.key_id,
           repository_id: repository_id,
           environment_name: loc,
