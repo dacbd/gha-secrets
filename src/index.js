@@ -11,7 +11,7 @@ async function run() {
     const value = core.getInput('value');  // required
     const visibility = core.getInput('visibility'); // optional
     const octokit = github.getOctokit(token);
-    const [org, repo] = context.payload.repository.full_name.split('/');
+    const [org, repo] = core.getInput('repository').split('/');
     const repository_id = (await octokit.rest.repos.get({
       owner: org, 
       repo: repo

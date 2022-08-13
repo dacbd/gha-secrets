@@ -22,6 +22,9 @@ inputs:
     decription: 'Required when changing org level secrets. Defaults to "selected"'
     required: false
     default: 'selected'
+  repository:
+    description: 'The repository to add the secret to. Defaults to the repository running this action'
+    default: '${{ github.repository }}'
 runs:
   using: 'node16'
   main: 'dist/index.js'
