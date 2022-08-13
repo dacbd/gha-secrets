@@ -11909,8 +11909,11 @@ async function run() {
     const value = core.getInput('value');  // required
     const visibility = core.getInput('visibility'); // optional
     const octokit = github.getOctokit(token);
-    const repository_id = context.payload.repository.id
     const [org, repo] = context.payload.repository.full_name.split('/');
+    const repository_id = (await octokit.rest.repos.get({
+      owner: org, 
+      repo: repo
+    })).id;
     core.setSecret(value);
 
     core.debug(`location: ${loc}`);
