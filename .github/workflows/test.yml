@@ -19,7 +19,7 @@ jobs:
       - name: Gen new random secret
         id: new
         run: |
-          new_value=$(tr -dc 'a-zA-Z0-9' < /dev/random | head -c10)
+          new_value=$(cat /dev/random | tr -dc 'a-zA-Z0-9' | head -c10)
           echo "::set-output name=value::$new_value"
       - uses: ./.
         with:
