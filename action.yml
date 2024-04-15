@@ -26,5 +26,5 @@ inputs:
     description: 'The repository to add the secret to. Defaults to the repository running this action'
     default: '${{ github.repository }}'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
