@@ -47,7 +47,8 @@ async function run() {
       default:
         core.debug('loading environment key')
         res = await octokit.rest.actions.getEnvironmentPublicKey({
-          repository_id: repository_id,
+          owner: org,
+          repo: repo,
           environment_name: loc
         });
         break;
